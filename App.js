@@ -1,37 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
-
-class LandingPageTitle extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    let titleText = this.props.title;
-    return (
-      <View style={{height: 50}}>
-        <Text>{titleText}</Text>
-      </View>
-    )
-  }
-}
-
-class LandingPageImage extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    let pic = {
-      uri: this.props.uri
-    };
-    return (
-      <View style={{height: 300}}>
-        <Image source={pic} style={{width: 200, height: 300}} />
-      </View>
-    )
-  }
-}
+import { StyleSheet, Text, View, Image, TextInput, Button, Alert, FlatList } from 'react-native';
 
 class SearchInput extends Component {
   constructor(props) {
@@ -40,12 +8,43 @@ class SearchInput extends Component {
   }
   render() {
     return (
-      <View style={{height: 50}}>
+      <View style={styles.searchInput}>
         <Text>{this.state.text}</Text>
         <TextInput 
           style={{height: 40}}
           placeholder='Type something in me...'
           onChangeText={(text) => this.setState({text})}
+        />
+        <Button
+          onPress={() => {
+            Alert.alert('You tapped the button!');
+          }}
+          title="Press Me"
+        />
+      </View>
+    )
+  }
+}
+
+class SearchResults extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <View style={styles.searchResults}>
+        <FlatList 
+          data={[
+            {key: 'Devin'},
+            {key: 'Jackson'},
+            {key: 'James'},
+            {key: 'Joel'},
+            {key: 'John'},
+            {key: 'Jillian'},
+            {key: 'Jimmy'},
+            {key: 'Julie'},
+          ]}
+          renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
         />
       </View>
     )
@@ -55,21 +54,33 @@ class SearchInput extends Component {
 export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <LandingPageTitle title='I AM THE TITLE'/>
-        <LandingPageImage uri='https://picsum.photos/200/300/?random' />
+      <View style={styles.parentContainer}>
         <SearchInput  />
+        <SearchResults  />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  parentContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: 'red',
   },
+  searchInput: {
+    flex: 1, 
+    backgroundColor: 'yellow'
+  },
+  searchResults: {
+    flex: 3, 
+    backgroundColor: 'green'
+  },
+  item: {
+    padding: 10,
+    fontSize: 36,
+    height: 44,
+  }
 });
