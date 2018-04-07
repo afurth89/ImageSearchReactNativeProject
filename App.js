@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 
 class LandingPageTitle extends Component {
   constructor(props) {
@@ -32,6 +32,22 @@ class LandingPageImage extends Component {
     )
   }
 }
+
+class SearchInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {text: ''};
+  }
+  render() {
+    return (
+      <View style={{height: 50}}>
+        <Text>{this.state.text}</Text>
+        <TextInput 
+          style={{height: 40}}
+          placeholder='Type something in me...'
+          onChangeText={(text) => this.setState({text})}
+        />
+      </View>
     )
   }
 }
@@ -42,6 +58,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <LandingPageTitle title='I AM THE TITLE'/>
         <LandingPageImage uri='https://picsum.photos/200/300/?random' />
+        <SearchInput  />
       </View>
     );
   }
