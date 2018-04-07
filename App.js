@@ -9,7 +9,9 @@ class LandingPageTitle extends Component {
   render() {
     let titleText = this.props.title;
     return (
-      <Text>{titleText}</Text>
+      <View style={{height: 50}}>
+        <Text>{titleText}</Text>
+      </View>
     )
   }
 }
@@ -24,7 +26,12 @@ class LandingPageImage extends Component {
       uri: this.props.uri
     };
     return (
-      <Image source={pic} style={{width: 193, height: 110}} />
+      <View style={{height: 300}}>
+        <Image source={pic} style={{width: 200, height: 300}} />
+      </View>
+    )
+  }
+}
     )
   }
 }
@@ -34,7 +41,7 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <LandingPageTitle title='I AM THE TITLE'/>
-        <LandingPageImage uri='https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg' />
+        <LandingPageImage uri='https://picsum.photos/200/300/?random' />
       </View>
     );
   }
@@ -43,6 +50,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
