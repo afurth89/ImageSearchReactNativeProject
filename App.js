@@ -1,74 +1,57 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, Button, Alert, FlatList } from 'react-native';
 
-class SearchInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {text: ''};
-  }
-  render() {
-    return (
-      <View style={styles.searchInput}>
-        <Text>{this.state.text}</Text>
-        <TextInput 
-          style={{height: 40}}
-          placeholder='Type something in me...'
-          onChangeText={(text) => this.setState({text})}
-        />
-        <Button
-          onPress={() => {
-            Alert.alert('You tapped the button!');
-          }}
-          title="Press Me"
-        />
-      </View>
-    )
-  }
-}
 
-class SearchResults extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isLoading: true }
+    this.state = {
+      text: '',
+      dataReceived: false
+    };
   }
-  
-  componentDidMount() {
-    return fetch('https://pixabay.com/api/?key=8622479-43a84036a79d6b86f0d2526cd&q=yellow+flowers&image_type=photo&pretty=true')
+  getImages(searchInput) {
+    console.log("\n\n @@@ SEARCHING", searchInput);
+    let queryString = searchInput.replace(/ /g, '+');
+    let requestUri = `https://pixabay.com/api/?key=8622479-43a84036a79d6b86f0d2526cd&q=${queryString}&image_type=photo&pretty=true`
+    console.log("\n\n @@@ URI", requestUri)
+    let response = fetch(requestUri)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.hits);
         this.setState({
-          isLoading: false,
+          dataReceived: false,
           dataSource: responseJson.hits
-        }, function() {
-          
+        }, function(){
+          console.log("\n\n *** RESULTS", responseJson.hits);
         });
-
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error)
       });
   }
 
   render() {
     return (
-      <View style={styles.searchResults}>
-        <FlatList 
-          data={this.state.dataSource}
-          renderItem={ ({item}) => <Image source={{uri:item.largeImageURL}} style={styles.item}/> }
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    )
-  }
-}
-
-export default class App extends Component {
-  render() {
-    return (
       <View style={styles.parentContainer}>
-        <SearchInput  />
-        <SearchResults  />
+        <View style={styles.searchInput}>
+          <Text style={{height: 40}} >{this.state.text}</Text>
+          <TextInput 
+            style={{height: 40}}
+            placeholder='Type something in me...'
+            onChangeText={(text) => this.setState({text})}
+          />
+          <Button
+            onPress={() => this.getImages(this.state.text) }
+            title="Press Me"
+          />
+        </View>
+        <View style={styles.searchResults}>
+          <FlatList 
+            data={this.state.dataSource}
+            renderItem={ ({item}) => <Image source={{uri:item.largeImageURL}} style={styles.item}/> }
+            keyExtractor={(item, index) => index}
+          />
+        </View>
       </View>
     );
   }
@@ -96,3 +79,4 @@ const styles = StyleSheet.create({
     height: 110
   }
 });
+
